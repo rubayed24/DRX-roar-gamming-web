@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRX-roar Gaming</title>
+    <meta name="description" content="Experience next-level gaming with DRX-roar Gaming's cutting-edge games and technology">
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" as="style" crossorigin>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" crossorigin>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" as="script" crossorigin>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/gsap.min.js" as="script" crossorigin>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/ScrollTrigger.min.js" as="script" crossorigin>
+    
+<!-- animate-style -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  
+    <!-- CSS with optimized loading -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="all">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #8a2be2;
+            --secondary: #ff3e80;
+            --accent: #00c9ff;
+            --dark: #1a0a2c;
+            --darker: #0d0518;
+            --light: #f0f0f8;
+            --glass: rgba(255, 255, 255, 0.08);
+            --transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+
+
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark), var(--darker));
+            min-height: 100vh;
+            color: var(--light);
+            overflow-x: hidden;
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        body.light-mode {
+            --dark: #e0e0ff;
+            --darker: #c0c0ff;
+            --light: #0a0a20;
+            --glass: rgba(0, 0, 0, 0.08);
+            background: linear-gradient(135deg, var(--dark), var(--darker));
+        }
+
+        #bg-canvas, .globe-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Logo */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            padding: 2rem 0;
+            perspective: 1000px;
+        }
+
+        .logo {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            line-height: 1;
+            letter-spacing: 2px;
+            text-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+            transition: var(--transition);
+            transform-style: preserve-3d;
+        }
+
+        .logo:hover {
+            transform: rotateY(10deg) scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 0;
+            position: relative;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-title span {
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Liquid Buttons */
+        .btn-liquid {
+            position: relative;
+            display: inline-block;
+            padding: 10px 50px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 50px;
+            overflow: hidden;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(138, 43, 226, 0.3);
+            z-index: 1;
+            margin: 1px;
+        }
+
+        .btn-liquid::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.419), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+
+        .btn-liquid:hover::before {
+            left: 100%;
+        }
+
+        .btn-liquid:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(138, 43, 226, 0.5);
+        }
+
+        /* Game Cards */
+        .games-section {
+            padding: 8rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 4rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+       .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+      .game-card {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.5s ease;
+}
+
+.game-card::before {
+    content: '';
+    position: absolute;
+    inset:0;
+    background: linear-gradient(60deg, var(--primary), var(--secondary));
+    opacity:0.15;
+    filter: blur(25px);
+    transition: all 0.5s ease;
+}
+
+
+
+.game-card .particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: floatParticles 6s infinite;
+}
+
+@keyframes floatParticles {
+    0% { transform: translateY(0) translateX(0) scale(1);}
+    50% { transform: translateY(-20px) translateX(10px) scale(1.3);}
+    100% { transform: translateY(0) translateX(0) scale(1);}
+}
+
+        .game-card:hover {
+            transform: translateX(-20px);
+            box-shadow: 0 20px 40px rgba(138, 43, 226, 0.4);
+        }
+.game-card:hover::before {
+    opacity:0.35;
+    transform: scale(1.1);
+}
+.game-card:hover { transform: translateX(-15px); }
+
+
+
+        .game-img {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, var(--primary), var(--darker));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-img::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: var(--transition);
+        }
+
+
+        .game-card:hover .game-img::before {
+            top: 50%;
+            left: 50%;
+        }
+
+        .game-content {
+            padding: 2rem;
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .game-desc {
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+       .back-to-top {
+    
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: 2s ease;
+    z-index: 1000;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+.back-to-top:hover { 
+    background: var(--secondary);
+    transform: translateY(-5px);
+}
+
+        /* Footer */
+        footer {
+            padding: 4rem 0 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            transition: var(--transition);
+            font-size: 1.25rem;
+        
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Liquid Effect */
+        .liquid-effect {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .pulse {
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+ .glow-button {
+    position: relative;
+    cursor: pointer;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    z-index: 1;
+    background: linear-gradient(135deg, #6b11cb, #2575fc);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(107, 17, 203, 0.4);
+}
+
+.glow-button::before,
+.glow-button::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+    transition: all 0.5s ease;
+}
+
+.glow-button::before {
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(107,17,203,0.4) 0%, transparent 70%);
+    filter: blur(40px);
+    opacity: 0.7;
+}
+
+.glow-button::after {
+    bottom: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(37,117,252,0.4) 0%, transparent 70%);
+    filter: blur(40px);
+    opacity: 0.7;
+}
+
+.glow-button .inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    padding: 0 1.5rem;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
+    color: #581c87;
+    overflow: hidden;
+}
+
+.glow-button .inner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196,181,253,0.2) 0%, transparent 70%);
+    transform: scale(0);
+    transition: transform 0.5s ease;
+    z-index: 0;
+}
+
+.glow-button .inner span {
+    position: relative;
+    z-index: 2;
+    white-space: nowrap;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Hover Animation */
+.glow-button:hover::before,
+.glow-button:hover::after {
+    transform: rotate(10deg) scale(1.05);
+    opacity: 1;
+}
+
+.glow-button:hover .inner::before {
+    transform: scale(1);
+}
+
+.glow-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(107, 17, 203, 0.6);
+}
+
+/* Popup container */
+.popup {
+  display: flex; /* Hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ z-index: 1000;
+}
+
+/* Popup content */
+.popup-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  animation: popupShow 0.3s ease forwards;
+}
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #555;
+}
+
+/* Popup animation */
+@keyframes popupShow {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Confirm button inside popup */
+.popup-content .inner {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+
+        /* Textured text effect */
+        .textured-text {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1;
+            letter-spacing: 2px;
+            background-image: url('https://images.unsplash.com/photo-1501630834273-4b5604d2ee31?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: textureScale 10s linear infinite alternate;
+        }
+        
+        @keyframes textureScale {
+            0% { background-size: 100% auto; }
+            100% { background-size: 150% auto; }
+        }
+        
+        /* Glitch effect container */
+        .glitch-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .glitch-text {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1;
+            letter-spacing: 2px;
+            position: relative;
+        }
+        
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -1px 0 red;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -1px 0 blue;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+        
+        @keyframes glitch-anim {
+            0% { clip: rect(42px, 9999px, 44px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(48px, 9999px, 29px, 0); }
+            15% { clip: rect(42px, 9999px, 73px, 0); }
+            20% { clip: rect(63px, 9999px, 27px, 0); }
+            25% { clip: rect(34px, 9999px, 55px, 0); }
+            30% { clip: rect(86px, 9999px, 73px, 0); }
+            35% { clip: rect(20px, 9999px, 20px, 0); }
+            40% { clip: rect(26px, 9999px, 60px, 0); }
+            45% { clip: rect(25px, 9999px, 66px, 0); }
+            50% { clip: rect(57px, 9999px, 98px, 0); }
+            55% { clip: rect(5px, 9999px, 46px, 0); }
+            60% { clip: rect(82px, 9999px, 31px, 0); }
+            65% { clip: rect(54px, 9999px, 27px, 0); }
+            70% { clip: rect(28px, 9999px, 99px, 0); }
+            75% { clip: rect(45px, 9999px, 69px, 0); }
+            80% { clip: rect(23px, 9999px, 85px, 0); }
+            85% { clip: rect(54px, 9999px, 84px, 0); }
+            90% { clip: rect(45px, 9999px, 47px, 0); }
+            95% { clip: rect(37px, 9999px, 20px, 0); }
+            100% { clip: rect(73px, 9999px, 99px, 0); }
+        }
+        
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(52px, 9999px, 74px, 0); }
+            10% { clip: rect(79px, 9999px, 85px, 0); }
+            15% { clip: rect(75px, 9999px, 5px, 0); }
+            20% { clip: rect(67px, 9999px, 61px, 0); }
+            25% { clip: rect(14px, 9999px, 79px, 0); }
+            30% { clip: rect(1px, 9999px, 66px, 0); }
+            35% { clip: rect(86px, 9999px, 30px, 0); }
+            40% { clip: rect(23px, 9999px, 98px, 0); }
+            45% { clip: rect(85px, 9999px, 72px, 0); }
+            50% { clip: rect(71px, 9999px, 75px, 0); }
+            55% { clip: rect(2px, 9999px, 48px, 0); }
+            60% { clip: rect(30px, 9999px, 16px, 0); }
+            65% { clip: rect(59px, 9999px, 50px, 0); }
+            70% { clip: rect(41px, 9999px, 62px, 0); }
+            75% { clip: rect(2px, 9999px, 82px, 0); }
+            80% { clip: rect(47px, 9999px, 73px, 0); }
+            85% { clip: rect(3px, 9999px, 27px, 0); }
+            90% { clip: rect(26px, 9999px, 55px, 0); }
+            95% { clip: rect(42px, 9999px, 97px, 0); }
+            100% { clip: rect(38px, 9999px, 49px, 0); }
+        
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .btn-liquid {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+            #bg-canvas, .globe-container {
+                width: 100vw;
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+    Background 
+     Elements 
+     -->
+    
+     <div id="bg-canvas"></div>
+    <div class=" globe-container " id="globe"></div>
+    
+    <!-- Liquid Effects -->
+    <div class="liquid-effect" style="width: 400px; height: 400px; background: var(--accent); top: 10%; left: 10%;"></div>
+    <div class="liquid-effect" style="width: 500px; height: 500px; background: var(--secondary); bottom: 10%; right: 10%;"></div>
+    
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+    
+    <!-- Content Container -->
+    <div class="container">
+        <!-- Logo with Glitch Effect -->
+        <div class="logo-container ">
+            <div  class="glitch-container animate__hinge ">
+                <h1 class="glitch-text pulse " data-text="DRX-roar">
+                    DRX-roar
+                </h1>
+            </div>
+            <span class="textured-text "> Gaming</span>
+        </div>
+        
+        <div>
+
+
+        </div>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title ">Experience <span>Next-Level</span> Gaming</h1>
+                <p class="hero-subtitle">Immerse yourself in breathtaking worlds with cutting-edge graphics, responsive controls, and an unforgettable gaming experience powered by our revolutionary technology.</p>
+                
+                <div class="hero-buttons d-flex flex-wrap justify-content-center">
+                    <!-- Button HTML -->
+<button class="glow-button" onclick="buttonClicked()">
+  <div class="inner">
+    <span>Click Me</span>
+  </div>
+</button>
+
+<button class="glow-button ms-3" onclick="buttonClicked()">
+  <div class="inner">
+    <span>Play Now</span>
+  </div>
+</button>
+
+
+
+<script>
+  function buttonClicked() {
+    alert("Pleasse wait ");
+    
+  }
+</script>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Games Section -->
+        <section class="games-section" aria-labelledby="games-heading">
+            <h2 class="section-title" id="games-heading">Featured Games</h2>
+            
+            <div class="games-grid">
+                <!-- Game Card 1 -->
+                <div class="game-card" role="article">
+                    <div class="game-img" aria-hidden="true"></div>
+                    <div class="game-content">
+                        <h3 class="game-title">Cyber Nexus</h3>
+                        <p class="game-desc">Enter a neon-drenched future where humans and machines collide in this action-packed RPG.</p>
+                        <div class="game-stats">
+                            <div class="stat" aria-label="Rating: 9.5 out of 10">
+                                <span class="stat-value">9.5</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                            <div class="stat" aria-label="Gameplay duration: 120+ hours">
+                                <span class="stat-value">120+</span>
+                                <span class="stat-label">Hours</span>
+                            </div>
+                            <div class="stat" aria-label="4.7 million players">
+                                <span class="stat-value">4.7M</span>
+                                <span class="stat-label">Players</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game Card 2 -->
+                <div class="game-card" role="article">
+                    <div class="game-img" aria-hidden="true"></div>
+                    <div class="game-content">
+                        <h3 class="game-title">Shadow Realms</h3>
+                        <p class="game-desc">Uncover ancient secrets in a world where magic and technology intertwine.</p>
+                        <div class="game-stats">
+                            <div class="stat" aria-label="Rating: 9.2 out of 10">
+                                <span class="stat-value">9.2</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                            <div class="stat" aria-label="Gameplay duration: 80+ hours">
+                                <span class="stat-value">80+</span>
+                                <span class="stat-label">Hours</span>
+                            </div>
+                            <div class="stat" aria-label="3.2 million players">
+                                <span class="stat-value">3.2M</span>
+                                <span class="stat-label">Players</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+   
+                <!-- Game Card 3 -->
+                <div class="game-card" role="article">
+                    <div class="game-img" aria-hidden="true"></div>
+                    <div class="game-content">
+                        <h3 class="game-title">Quantum Drift</h3>
+                        <p class="game-desc">Race through time and space in the most advanced racing simulator ever created.</p>
+                        <div class="game-stats">
+                            <div class="stat" aria-label="Rating: 8.9 out of 10">
+                                <span class="stat-value">8.9</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                            <div class="stat" aria-label="Gameplay duration: 60+ hours">
+                                <span class="stat-value">60+</span>
+                                <span class="stat-label">Hours</span>
+                            </div>
+                            <div class="stat" aria-label="2.8 million players">
+                                <span class="stat-value">2.8M</span>
+                                <span class="stat-label">Players</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class=" logo-container ">
+
+        <h1 class=" text-inside ">
+                SHARE WITH ME WEB <br>CODERS 
+        </h1>
+
+
+    </div>
+
+     <style>
+        
+        .text-inside {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1;
+            letter-spacing: 2px;
+            background-image: url('https://images.unsplash.com/photo-1658003937179-9b11cd675d99?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: textureScale 18s linear infinite alternate;
+        }
+
+    </style>
+        <!-- Footer -->
+
+        <footer >
+            <div class="social-links">
+                <a href="#" class="social-link" aria-label="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="social-link" aria-label="Discord">
+                    <i class="fab fa-discord"></i>
+                </a>
+                <a href="#" class="social-link" aria-label="YouTube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="#" class="social-link" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            
+            <p class="copyright">© 2023 Nexus Gaming. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <!-- Floating Arrow -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Loading spinner for WebGL -->
+    <div id="webgl-loading" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--darker);display:flex;justify-content:center;align-items:center;z-index:1000;transition:opacity 0.5s ease;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    
+    <!-- WebGL fallback -->
+    <div id="webgl-fallback" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--darker);z-index:1000;padding:20px;text-align:center;color:white;">
+        <h2>3D Graphics Not Supported</h2>
+        <p>Your device or browser doesn't support WebGL technology required for this experience.</p>
+        <p>The site will still function, but without the 3D background effects.</p>
+        <button id="continue-btn" class="btn btn-primary mt-3">Continue to Site</button>
+    </div>
+<!-- Main Money-Making Section -->
+<section class="money-form-section">
+  <div class="form-container">
+    <h2 style="
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" class=" form-title">Get Startedn ESPORTS & Earn</h2>
+    <p style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;"
+     class="form-subtitle">Fill out the form to start your project with us.</p>
+    
+    <form class="money-form" id="moneyForm">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="date">DATE</label>
+        <select id="service" name="service" required>
+          <option class=" display-flex
+          justify-content-center align-items-center d-flex" value="">Day </option>
+          <option value="web">SU</option>
+          <option value="design">MON</option>
+          <option value="seo">WE</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="budget">Budget (USD)</label>
+        <input type="number" id="budget" name="budget" placeholder="Enter your budget" required>
+      </div>
+      
+      <button type="submit" class="btn-submit">Submit & Start</button>
+    </form>
+  </div>
+</section>
+
+<style>
+/* Money-Making Section Styles */
+.money-form-section {
+
+
+background: linear-gradient(
+    135deg, 
+    #6b11cbe4, 
+    #2575fc, 
+    #00fff7c7, 
+    #904fffae, 
+    #6b11cbcc
+  );
+  background-size: 300% 300%;
+  border-radius: 60px;
+  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: #fffffffb;
+  border-top: 8px solid rgba(77, 20, 163, 0.4);
+  border-bottom: 8px solid rgba(20, 163, 151, 0.3);
+  animation: backgroundMove 5s ease-in-out infinite alternate;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+
+
+}
+
+/* Smooth gradient animation */
+@keyframes backgroundMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.form-container {
+  background: #ffffffa5;
+  color: #333;
+  border-radius: 60px;
+  padding: 30px;
+  max-width: 450px;
+  padding: zero 20px;
+  width: 100%;
+  box-shadow: 5px 10px 25px rgba(56, 19, 124, 0.615);
+  text-align: center;
+}
+
+.form-title {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.form-subtitle {
+  font-size: 1rem;
+  margin-bottom: 25px;
+  color: #555;
+}
+
+.money-form .form-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.money-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.money-form input,
+.money-form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s;
+}
+
+.money-form input:focus,
+.money-form select:focus {
+  border-color: #2575fc;
+  box-shadow: 0 0 5px rgba(37,117,252,0.4);
+}
+.btn-submit {
+   background: linear-gradient(270deg, #ff00ff, #6a11cb, #2575fc, #00fff7, #ff4f70);
+  background-size: 1000% 1000%;
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: float 3s ease-in-out infinite, gradientAnimation 8s ease infinite;
+}
+
+.btn-submit:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Responsive example */
+@media (max-width: 768px) {
+  .btn-submit {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+</style>
+
+    <!-- JavaScript Libraries with Defer -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/ScrollTrigger.min.js" defer></script>
+    
+    <!-- Main JavaScript -->
+    <script>
+        // Check WebGL support
+        function checkWebGLSupport() {
+            try {
+                const canvas = document.createElement('canvas');
+                return !!window.WebGLRenderingContext && 
+                    (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const webglLoading = document.getElementById('webgl-loading');
+            const webglFallback = document.getElementById('webgl-fallback');
+            const continueBtn = document.getElementById('continue-btn');
+            const themeToggle = document.getElementById('themeToggle');
+            
+            // Theme toggle functionality
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('light-mode');
+                const isLightMode = document.body.classList.contains('light-mode');
+                themeToggle.innerHTML = isLightMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+            });
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            // Show loading spinner
+            webglLoading.style.display = 'flex';
+            
+            // Check WebGL support
+            if (!checkWebGLSupport()) {
+                webglLoading.style.display = 'none';
+                webglFallback.style.display = 'block';
+                return;
+            }
+            
+            // Wait for Three.js to load
+            if (typeof THREE !== 'undefined') {
+                initBackground();
+                initGlobe();
+                initFloatingArrow();
+                initAnimations();
+                
+                // Hide loading spinner
+                setTimeout(() => {
+                    webglLoading.style.opacity = '0';
+                    setTimeout(() => {
+                        webglLoading.style.display = 'none';
+                    }, 500);
+                }, 1000);
+            } else {
+                // Three.js failed to load
+                webglLoading.style.display = 'none';
+                webglFallback.style.display = 'block';
+            }
+            
+            // Continue without WebGL
+            continueBtn.addEventListener('click', () => {
+                webglFallback.style.display = 'none';
+                initFloatingArrow();
+                initAnimations();
+            });
+            
+            // Initialize service worker
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(reg => console.log('Service Worker registered', reg))
+                        .catch(err => console.log('Service Worker registration failed', err));
+                });
+            }
+        });
+
+        // Initialize background
+        function initBackground() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ 
+                alpha: true,
+                antialias: true,
+                powerPreference: 'low-power'
+            });
+            
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('bg-canvas').appendChild(renderer.domElement);
+
+            // Create particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 2500; // Reduced for performance
+            const posArray = new Float32Array(particlesCount * 3);
+            const colorArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 50;
+                colorArray[i] = Math.random();
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.1,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            camera.position.z = 5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                particlesMesh.rotation.x += 0.0005;
+                particlesMesh.rotation.y += 0.001;
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Responsive handling with debounce
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                }, 200);
+            });
+            
+            // Cleanup on unload
+            window.addEventListener('beforeunload', () => {
+                renderer.dispose();
+                particlesGeometry.dispose();
+                particlesMaterial.dispose();
+            });
+        }
+        
+        // Initialize globe
+        function initGlobe() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ 
+                alpha: true, 
+                antialias: true,
+                powerPreference: 'low-power'
+            });
+            
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('globe').appendChild(renderer.domElement);
+
+            // Create the glassy globe
+            const globeGeometry = new THREE.SphereGeometry(2, 48, 48); // Reduced segments
+            const globeMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x4a1e8c,
+                metalness: 0.7,
+                roughness: 0.1,
+                transmission: 0.85,
+                thickness: 0.5,
+                clearcoat: 1,
+                clearcoatRoughness: 0.05,
+                reflectivity: 1,
+                transparent: true,
+                opacity: 0.7,
+                ior: 1.5,
+                specularIntensity: 1,
+                emissive: 0x2c0a3b,
+                emissiveIntensity: 0.2
+            });
+            const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+            scene.add(globe);
+
+            // Add glow effect
+            const glowMaterial = new THREE.MeshBasicMaterial({
+                color: 0xa966ff,
+                transparent: true,
+                opacity: 0.18,
+                wireframe: true
+            });
+            const glowSphere = new THREE.Mesh(
+                new THREE.SphereGeometry(2.1, 24, 24), // Reduced segments
+                glowMaterial
+            );
+            scene.add(glowSphere);
+
+            // Add atmosphere
+            const atmosphereMaterial = new THREE.MeshPhongMaterial({
+                color: 0x8a2be2,
+                transparent: true,
+                opacity: 0.08,
+                side: THREE.BackSide
+            });
+            const atmosphere = new THREE.Mesh(
+                new THREE.SphereGeometry(2.2, 48, 48), // Reduced segments
+                atmosphereMaterial
+            );
+            scene.add(atmosphere);
+
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.18);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.25);
+            directionalLight.position.set(5, 3, 5);
+            scene.add(directionalLight);
+            const pointLight1 = new THREE.PointLight(0xa966ff, 0.7, 100);
+            pointLight1.position.set(5, 5, 5);
+            scene.add(pointLight1);
+            const pointLight2 = new THREE.PointLight(0x6a0dad, 0.7, 100);
+            pointLight2.position.set(-5, -5, -5);
+            scene.add(pointLight2);
+
+            camera.position.z = 5;
+
+            // Add stars in the background
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsMaterial = new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 0.02,
+                transparent: true,
+                opacity: 0.5
+            });
+            const starsVertices = [];
+            for (let i = 0; i < 5000; i++) { // Reduced stars
+                const x = (Math.random() - 0.5) * 200;
+                const y = (Math.random() - 0.5) * 200;
+                const z = (Math.random() - 0.5) * 200;
+                starsVertices.push(x, y, z);
+            }
+            starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
+            const stars = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(stars);
+
+            function animateGlobe() {
+                requestAnimationFrame(animateGlobe);
+                globe.rotation.x += 0.001;
+                glowSphere.rotation.x += 0.001;
+                stars.rotation.y += 0.0002;
+                renderer.render(scene, camera);
+            }
+            animateGlobe();
+
+            // Responsive handling with debounce
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                }, 200);
+            });
+            
+            // Cleanup on unload
+            window.addEventListener('beforeunload', () => {
+                renderer.dispose();
+                globeGeometry.dispose();
+                globeMaterial.dispose();
+                starsGeometry.dispose();
+                starsMaterial.dispose();
+            });
+        }
+        
+        // Initialize floating arrow
+       document.addEventListener('DOMContentLoaded', () => {
+    initFloatingArrow();
+});
+
+function initFloatingArrow() { 
+    const backToTop = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+    
+    backToTop.addEventListener('click', () => {
+        if (typeof gsap !== 'undefined' && gsap.to) {
+            gsap.to(window, {
+                duration: 1,
+                scrollTo: 0,
+                ease: "power2.inOut"
+            });
+        } else {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    });
+}
+        // Initialize animations with GSAP
+        function initAnimations() {
+            if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+            
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Animate hero elements
+            gsap.from('.logo', {
+                duration: 1.5,
+                y: -50,
+                opacity: 0,
+                ease: "power3.out"
+            });
+            
+            gsap.from('.hero-title', {
+                duration: 1.2,
+                y: 50,
+                opacity: 0,
+                delay: 0.3,
+                ease: "power3.out"
+            });
+            
+            gsap.from('.hero-subtitle', {
+                duration: 1.2,
+                y: 50,
+                opacity: 0,
+                delay: 0.5,
+                ease: "power3.out"
+            });
+            
+            gsap.from('.btn-liquid', {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                stagger: 0.2,
+                delay: 0.7,
+                ease: "power3.out"
+            });
+            
+            // Animate game cards
+            gsap.from('.game-card', {
+                 duration: 1,
+                 y: 100,
+                 opacity: 0,
+                    stagger: 0.2,
+                    scrollTrigger: {
+                    trigger: '.games-section',
+                    start: 'top 80%',
+                    toggleActions: 'play none none none'
+                
+                },
+                ease: "power3.out"
+            });
+        }
+    </script>
+    <script  src='https://cdn.jsdelivr.net/npm/disable-devtool'
+    ></script>
+</body>
+</html>
