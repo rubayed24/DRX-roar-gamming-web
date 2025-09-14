@@ -197,3 +197,16 @@ function initAnimations() {
                 }, 2000);
             });
         });
+// Hero title 3D scroll effect
+  window.addEventListener("scroll", () => {
+    const title = document.querySelector(".hero-title");
+    if (!title) return;
+
+    // Scroll value between -15 and 15 degrees for smooth movement
+    const scrollFactor = window.scrollY / window.innerHeight;
+    const rotateY = Math.sin(scrollFactor) * 15; 
+    const rotateX = Math.cos(scrollFactor) * 10; 
+
+    // Apply transform for 3D effect
+    title.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+});

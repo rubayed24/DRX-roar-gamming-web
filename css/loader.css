@@ -12,6 +12,10 @@
     align-items: center;
     z-index: 2000;
     transition: opacity 0.8s ease, transform 0.8s ease;
+    -webkit-transition: opacity 0.8s ease, transform 0.8s ease;
+    -moz-transition: opacity 0.8s ease, transform 0.8s ease;
+    -ms-transition: opacity 0.8s ease, transform 0.8s ease;
+    -o-transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .loader-content {
@@ -25,6 +29,7 @@
     height: 120px;
     margin: 0 auto 30px;
     animation: pulse 1.5s infinite;
+    -webkit-animation: pulse 1.5s infinite;
 }
 
 .loader-text {
@@ -53,6 +58,7 @@
     width: 0%;
     background: linear-gradient(90deg, var(--primary), var(--accent));
     transition: width 0.4s ease;
+    border-radius: 4px;
 }
 
 .loading-percentage {
@@ -60,10 +66,11 @@
     font-weight: 600;
     color: var(--accent);
     margin: 10px 0;
+
 }
 
 .loading-message {
-    
+
     font-size: 1.2rem;
     opacity: 0.8;
     margin-top: 10px;
@@ -72,11 +79,15 @@
 
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); -webkit-transform: scale(1.05); -moz-transform: scale(1.05); -ms-transform: scale(1.05); -o-transform: scale(1.05); }
+    50% {
+         transform: scale(1.05); -webkit-transform: scale(1.05); -moz-transform: scale(1.05); -ms-transform: scale(1.05); -o-transform: scale(1.05);
+        }
 }
 
 @keyframes spinner_YGAN {
-    100% { transform: rotate(360deg); }
+    0% { transform: rotate(0deg); -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); }
+
+    100% { transform: rotate(360deg); -webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); }
 }
 
 @media (max-width: 768px) {
